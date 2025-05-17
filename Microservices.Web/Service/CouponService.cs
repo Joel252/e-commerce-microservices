@@ -8,7 +8,7 @@ namespace Microservices.Web.Service
     public class CouponService : ICouponService
     {
         private readonly IBaseService _baseService;
-        private const string RESOURCE = "/api/CouponAPI";
+        private const string RESOURCE = "/api/coupon";
 
         public CouponService(IBaseService baseService)
         {
