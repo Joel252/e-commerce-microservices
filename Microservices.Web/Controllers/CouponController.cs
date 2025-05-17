@@ -34,11 +34,11 @@ namespace Microservices.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CouponCreate(CouponDTO model)
+        public async Task<IActionResult> CouponCreate(CouponDTO coupon)
         {
             if (ModelState.IsValid)
             {
-                ResponseDTO? response = await _couponService.CreateCouponAsync(model);
+                ResponseDTO? response = await _couponService.CreateCouponAsync(coupon);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -46,12 +46,12 @@ namespace Microservices.Web.Controllers
                 }
             }
 
-            return View();
+            return View(coupon);
         }
 
         public async Task<IActionResult> CouponDelete(int couponId)
         {
-            ResponseDTO? responseDelete = await _couponService.DeleteCouponAsync(couponId);
+            ResponseDTO? response = await _couponService.DeleteCouponAsync(couponId);
 
             return RedirectToAction("CouponIndex");
         }
