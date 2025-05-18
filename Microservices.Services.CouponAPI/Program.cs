@@ -46,7 +46,14 @@ void ApplyMigration()
         var _db = scope.ServiceProvider.GetRequiredService<CouponDbContext>();
         if (_db.Database.GetPendingMigrations().Count() > 0)
         {
-            _db.Database.Migrate();
+            try
+            {
+                _db.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Migration Error] {ex.Message}");
+            }
         }
     }
 }
