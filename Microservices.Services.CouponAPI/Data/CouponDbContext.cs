@@ -19,6 +19,7 @@ namespace Microservices.Services.CouponAPI.Data
                 CouponCode = "100FF",
                 DiscountAmount = 10,
                 MinAmount = 20,
+                LastUpdated = new DateTime(2025, 3, 1)
             });
 
             modelBuilder.Entity<Coupon>().HasData(new Coupon
@@ -27,6 +28,7 @@ namespace Microservices.Services.CouponAPI.Data
                 CouponCode = "200FF",
                 DiscountAmount = 20,
                 MinAmount = 40,
+                LastUpdated = new DateTime(2025, 3, 2)
             });
         }
     }
