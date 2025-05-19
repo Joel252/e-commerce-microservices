@@ -1,6 +1,9 @@
 ﻿namespace Microservices.Services.CouponAPI.Models.DTO
 {
-    public class CouponDTO
+    /// <summary>
+    /// Data transfer object for coupons.
+    /// </summary>
+    public class CouponDto
     {
         public int CouponId { get; set; }
         public string CouponCode { get; set; } = null!;
