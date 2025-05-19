@@ -6,28 +6,40 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Microservices.Services.CouponAPI.Controllers
 {
+    /// <summary>
+    /// Controller for managing coupon operations in the Microservices Coupon API.
+    /// </summary>
     [Route("api/coupon")]
     [ApiController]
-    public class CouponAPIController : ControllerBase
+    public class CouponApiController : ControllerBase
     {
         private readonly CouponDbContext _context;
-        private ResponseDTO _response;
-        private IMapper _mapper;
-
-        public CouponAPIController(CouponDbContext context, IMapper mapper)
+        private readonly ResponseDto _response;
+        private readonly IMapper _mapper;
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CouponApiController"/> class.
+        /// </summary>
+        /// <param name="context">The database context for coupon operations.</param>
+        /// <param name="mapper">The AutoMapper instance for object mapping.</param>
+        public CouponApiController(CouponDbContext context, IMapper mapper)
         {
             _context = context;
-            _response = new ResponseDTO();
+            _response = new ResponseDto();
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Retrieves all coupons from the database.
+        /// </summary>
+        /// <returns>A ResponseDTO containing a list of all coupons or error information</returns>
         [HttpGet]
-        public ResponseDTO Get()
+        public ResponseDto Get()
         {
             try
             {
                 IEnumerable<Coupon> coupons = _context.Coupons.ToList();
-                _response.Result = _mapper.Map<IEnumerable<CouponDTO>>(coupons);
+                _response.Result = _mapper.Map<IEnumerable<CouponDto>>(coupons);
             }
             catch (Exception ex)
             {
@@ -38,14 +50,19 @@ namespace Microservices.Services.CouponAPI.Controllers
             return _response;
         }
 
+        /// <summary>
+        /// Retrieves a coupon by ID from the database.
+        /// </summary>
+        /// <param name="id">The unique indentifier of the coupon.</param>
+        /// <returns>A ResponseDTO containing the requested coupon or error information.</returns>
         [HttpGet]
         [Route("{id:int}")]
-        public ResponseDTO Get(int id)
+        public ResponseDto Get(int id)
         {
             try
             {
                 Coupon coupon = _context.Coupons.First(c => c.CouponId == id);
-                _response.Result = _mapper.Map<CouponDTO>(coupon);
+                _response.Result = _mapper.Map<CouponDto>(coupon);
             }
             catch (Exception ex)
             {
@@ -56,14 +73,19 @@ namespace Microservices.Services.CouponAPI.Controllers
             return _response;
         }
 
+        /// <summary>
+        /// Retrieves a coupon by code from the database.
+        /// </summary>
+        /// <param name="code">The coupon code to search for (case-insensitive).</param>
+        /// <returns>A ResponseDTO containing the matched coupon or error information.</returns>
         [HttpGet]
         [Route("GetByCode/{code}")]
-        public ResponseDTO GetBycode(string code)
+        public ResponseDto GetBycode(string code)
         {
             try
             {
                 Coupon obj = _context.Coupons.First(c => c.CouponCode.ToLower() == code.ToLower());
-                _response.Result = _mapper.Map<CouponDTO>(obj);
+                _response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
             {
@@ -72,9 +94,14 @@ namespace Microservices.Services.CouponAPI.Controllers
             }
             return _response;
         }
-
+        
+        /// <summary>
+        /// Creates a new coupon in the database.
+        /// </summary>
+        /// <param name="couponDto">The CouponDTO containing the coupon information.</param>
+        /// <returns>A ResponseDTO containing the created coupon or error information.</returns>
         [HttpPost]
-        public ResponseDTO Post([FromBody] CouponDTO couponDto)
+        public ResponseDto Post([FromBody] CouponDto couponDto)
         {
             try
             {
@@ -82,7 +109,7 @@ namespace Microservices.Services.CouponAPI.Controllers
                 _context.Coupons.Add(obj);
                 _context.SaveChanges();
 
-                _response.Result = _mapper.Map<CouponDTO>(obj);
+                _response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
             {
@@ -92,8 +119,13 @@ namespace Microservices.Services.CouponAPI.Controllers
             return _response;
         }
 
+        /// <summary>
+        /// Updates an existing coupon in the database.
+        /// </summary>
+        /// <param name="couponDto">The CouponDTO containing the coupon information.</param>
+        /// <returns>A ResponseDTO containing the updated coupon or error information.</returns>
         [HttpPut]
-        public ResponseDTO Put([FromBody] CouponDTO couponDto)
+        public ResponseDto Put([FromBody] CouponDto couponDto)
         {
             try
             {
@@ -101,7 +133,7 @@ namespace Microservices.Services.CouponAPI.Controllers
                 _context.Coupons.Update(obj);
                 _context.SaveChanges();
 
-                _response.Result = _mapper.Map<CouponDTO>(obj);
+                _response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
             {
@@ -111,9 +143,14 @@ namespace Microservices.Services.CouponAPI.Controllers
             return _response;
         }
 
+        /// <summary>
+        /// Deletes a coupon from the database.
+        /// </summary>
+        /// <param name="id">The unique identifier of the coupon.</param>
+        /// <returns>A ResponseDTO containing the deleted coupon or error information.</returns>
         [HttpDelete]
         [Route("{id:int}")]
-        public ResponseDTO Delete(int id)
+        public ResponseDto Delete(int id)
         {
             try
             {
