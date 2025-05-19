@@ -4,14 +4,21 @@ using Microservices.Services.CouponAPI.Models.DTO;
 
 namespace Microservices.Services.CouponAPI
 {
-    public class MappingConfig
+    /// <summary>
+    /// Static class for configuring AutoMapper mappings.
+    /// </summary>
+    public static class MappingConfig
     {
-        public static MapperConfiguration ResgisterMaps()
+        /// <summary>
+        ///  Registers the AutoMapper mappings.
+        /// </summary>
+        /// <returns>AutoMapper configuration.</returns>
+        public static MapperConfiguration RegisterMaps()
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<CouponDTO, Coupon>();
-                config.CreateMap<Coupon, CouponDTO>();
+                config.CreateMap<CouponDto, Coupon>();
+                config.CreateMap<Coupon, CouponDto>();
             });
 
             return mappingConfig;
