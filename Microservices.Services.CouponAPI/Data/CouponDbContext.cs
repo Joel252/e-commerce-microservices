@@ -5,9 +5,9 @@ namespace Microservices.Services.CouponAPI.Data
 {
     public class CouponDbContext : DbContext
     {
-        public CouponDbContext(DbContextOptions<CouponDbContext> options) : base(options) { }
-
         public DbSet<Coupon> Coupons { get; set; }
+
+        public CouponDbContext(DbContextOptions<CouponDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
