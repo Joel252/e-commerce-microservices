@@ -9,6 +9,6 @@ namespace Microservices.Services.AuthAPI.Models
     public class ApplicationUser : IdentityUser
     {
         [Required]
-        public string Name { get; set; } = null!;
+        public required string Name { get; set; }
     }
 }
