@@ -4,17 +4,17 @@ This project is an e-commerce application built using a modern, decoupled, and s
 
 **Components developed:**
 
-| Microservice				| Description                                       |
-| ------------------------- | ------------------------------------------------- |
-| ``🛒 **Shopping Cart**``	| Shopping cart management							|
-| ``📦 **Product**``		| Product Management								|
-| ``🎟️ **Coupon**``			| Application and validation of discount coupons    |
-| ``📬 **Email**``			| Sending transactional emails						|
-| ``💳 **Payment**``		| Payment processing                                |
-| ``📦 **Order**``			| Order registration and tracking					|
-| ``🔐 **Identity**``		| User authentication and authorization				|
-| ``🚪 **API Gateway**``	| Centralized entry point for APIs					|
-| ``🌐 **Web App (MVC)**``	| User interface developed with ASP.NET Core MVC	|
+| Microservice			| Description										|
+| --------------------- | ------------------------------------------------- |
+| ``🛒 Shopping Cart``	| Shopping cart management							|
+| ``📦 Product``		| Product Management								|
+| ``🎟️ Coupon``			| Application and validation of discount coupons    |
+| ``📬 Email``			| Sending transactional emails						|
+| ``💳 Payment``		| Payment processing                                |
+| ``📦 Order``			| Order registration and tracking					|
+| ``🔐 Identity``		| User authentication and authorization				|
+| ``🚪 API Gateway``		| Centralized entry point for APIs					|
+| ``🌐 Web App (MVC)``	| User interface developed with ASP.NET Core MVC	|
 
 ![architecture](images/architecture.png)
 
@@ -23,12 +23,12 @@ This project is an e-commerce application built using a modern, decoupled, and s
 
 ## Technologies and tools used
 
-- **.NET 8 / ASP.NET Core**  
-- **Entity Framework Core + SQL Server**  
-- **Azure Service Bus (Topics y Queues)**  
-- **API Gateway**  
-- **Authentication and authorization with .NET Identity**  
-- **Swagger / OpenAPI**  
-- **Bootstrap 5**  
+- .NET 8 / ASP.NET Core
+- Entity Framework Core + SQL Server
+- Azure Service Bus (Topics y Queues)
+- API Gateway
+- Authentication and authorization with .NET Identity
+- Swagger / OpenAPI
+- Bootstrap 5
 
 ## How to run it?
