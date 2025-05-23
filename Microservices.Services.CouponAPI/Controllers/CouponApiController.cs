@@ -1,169 +1,109 @@
-﻿using AutoMapper;
-using Microservices.Services.CouponAPI.Data;
-using Microservices.Services.CouponAPI.Models;
+﻿using Microservices.Services.CouponAPI.Models;
 using Microservices.Services.CouponAPI.Models.DTO;
+using Microservices.Services.CouponAPI.Services.IService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservices.Services.CouponAPI.Controllers
 {
     /// <summary>
-    /// Controller for managing coupon operations in the Microservices Coupon API.
+    /// Provides API endpoints for managing coupons operations.
     /// </summary>
     [Route("api/coupon")]
     [ApiController]
     public class CouponApiController : ControllerBase
     {
-        private readonly CouponDbContext _context;
-        private readonly ResponseDto _response;
-        private readonly IMapper _mapper;
-        
+        private readonly ICouponService _couponService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CouponApiController"/> class.
         /// </summary>
-        /// <param name="context">The database context for coupon operations.</param>
-        /// <param name="mapper">The AutoMapper instance for object mapping.</param>
-        public CouponApiController(CouponDbContext context, IMapper mapper)
+        /// <param name="couponService">Service for handling coupon operations.</param>
+        public CouponApiController(ICouponService couponService)
         {
-            _context = context;
-            _response = new ResponseDto();
-            _mapper = mapper;
+            _couponService = couponService;
         }
 
         /// <summary>
-        /// Retrieves all coupons from the database.
+        /// Retrieves all available coupons.
         /// </summary>
-        /// <returns>A ResponseDTO containing a list of all coupons or error information</returns>
+        /// <returns>A list of all coupons.</returns>
         [HttpGet]
-        public ResponseDto Get()
+        public async Task<IActionResult> Get()
         {
-            try
-            {
-                IEnumerable<Coupon> coupons = _context.Coupons.ToList();
-                _response.Result = _mapper.Map<IEnumerable<CouponDto>>(coupons);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
+            return Ok(await _couponService.GetAllCouponsAsync());
         }
 
         /// <summary>
-        /// Retrieves a coupon by ID from the database.
+        /// Retrieves a specific coupon by its ID.
         /// </summary>
-        /// <param name="id">The unique indentifier of the coupon.</param>
-        /// <returns>A ResponseDTO containing the requested coupon or error information.</returns>
+        /// <param name="id">The ID of the coupon.</param>
+        /// <returns>The coupon if found, or a 404 error if not.</returns>
         [HttpGet]
         [Route("{id:int}")]
-        public ResponseDto Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            try
-            {
-                Coupon coupon = _context.Coupons.First(c => c.CouponId == id);
-                _response.Result = _mapper.Map<CouponDto>(coupon);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-
-            return _response;
+            var result = await _couponService.GetCouponByIdAsync(id);
+            return result.IsSuccess ? Ok(result) : NotFound(result);
         }
 
         /// <summary>
-        /// Retrieves a coupon by code from the database.
+        /// Retrieves a coupon by its code.
         /// </summary>
-        /// <param name="code">The coupon code to search for (case-insensitive).</param>
-        /// <returns>A ResponseDTO containing the matched coupon or error information.</returns>
+        /// <param name="code">The unique code of the coupon (case-insensitive).</param>
+        /// <returns>The coupon with the specified code, or a 404 error if not found.</returns>
         [HttpGet]
         [Route("GetByCode/{code}")]
-        public ResponseDto GetBycode(string code)
+        public async Task<IActionResult> GetByCode(string code)
         {
-            try
-            {
-                Coupon obj = _context.Coupons.First(c => c.CouponCode.ToLower() == code.ToLower());
-                _response.Result = _mapper.Map<CouponDto>(obj);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
+            var result = await _couponService.GetCouponByCodeAsync(code);
+            return result.IsSuccess ? Ok(result) : NotFound(result);
         }
-        
+
         /// <summary>
-        /// Creates a new coupon in the database.
+        /// Creates a new coupon.
         /// </summary>
-        /// <param name="couponDto">The CouponDTO containing the coupon information.</param>
-        /// <returns>A ResponseDTO containing the created coupon or error information.</returns>
+        /// <param name="couponDto">The DTO containing coupon information.</param>
+        /// <returns>The created coupon, or an error response if the data is invalid.</returns>
         [HttpPost]
-        public ResponseDto Post([FromBody] CouponDto couponDto)
+        public async Task<IActionResult> Post([FromBody] CouponDto couponDto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                Coupon obj = _mapper.Map<Coupon>(couponDto);
-                _context.Coupons.Add(obj);
-                _context.SaveChanges();
+                return BadRequest(new ResponseDto { IsSuccess = false, Message = "Invalid model state." });
+            }
 
-                _response.Result = _mapper.Map<CouponDto>(obj);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
+            var result = await _couponService.CreateCouponAsync(couponDto);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
 
         /// <summary>
-        /// Updates an existing coupon in the database.
+        /// Updates an existing coupon.
         /// </summary>
-        /// <param name="couponDto">The CouponDTO containing the coupon information.</param>
-        /// <returns>A ResponseDTO containing the updated coupon or error information.</returns>
+        /// <param name="dto">The DTO containing updated coupon data.</param>
+        /// <returns>The updated coupon, or an error response if the update failed.</returns>
         [HttpPut]
-        public ResponseDto Put([FromBody] CouponDto couponDto)
+        public async Task<IActionResult> Put([FromBody] CouponDto couponDto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                Coupon obj = _mapper.Map<Coupon>(couponDto);
-                _context.Coupons.Update(obj);
-                _context.SaveChanges();
+                return BadRequest(new ResponseDto { IsSuccess = false, Message = "Invalid model state." });
+            }
 
-                _response.Result = _mapper.Map<CouponDto>(obj);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
+            var result = await _couponService.UpdateCouponAsync(couponDto);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
 
         /// <summary>
-        /// Deletes a coupon from the database.
+        /// Deletes a coupon by its ID.
         /// </summary>
-        /// <param name="id">The unique identifier of the coupon.</param>
-        /// <returns>A ResponseDTO containing the deleted coupon or error information.</returns>
+        /// <param name="id">The ID of the coupon to delete.</param>
+        /// <returns>A success message or a 404 if the coupon was not found.</returns>
         [HttpDelete]
         [Route("{id:int}")]
-        public ResponseDto Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                Coupon obj = _context.Coupons.First(c => c.CouponId == id);
-                _context.Coupons.Remove(obj);
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
+            var result = await _couponService.DeleteCouponAsync(id);
+            return result.IsSuccess ? Ok(result) : NotFound(result);
         }
     }
 }

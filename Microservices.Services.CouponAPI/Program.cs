@@ -1,5 +1,7 @@
 using Microservices.Services.CouponAPI;
 using Microservices.Services.CouponAPI.Data;
+using Microservices.Services.CouponAPI.Services;
+using Microservices.Services.CouponAPI.Services.IService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +22,9 @@ builder.Services.AddDbContext<CouponDbContext>(option =>
 var mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Add service for coupon operations
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 var app = builder.Build();
 
