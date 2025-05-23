@@ -11,9 +11,8 @@ namespace Microservices.Services.AuthAPI.Service
     /// </summary>
     public class AuthService : IAuthService
     {
-        private readonly AuthDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthService"/> class.
@@ -21,11 +20,10 @@ namespace Microservices.Services.AuthAPI.Service
         /// <param name="context">The database context used for authentication-related data operations.</param>
         /// <param name="userManager">The user manager used to manage user accounts and authentication.</param>
         /// <param name="roleManager">The role manager used to manage user roles and permissions.</param>
-        public AuthService(AuthDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthService(UserManager<ApplicationUser> userManager, IJwtTokenGenerator jwtTokenGenerator)
         {
-            _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         /// <summary>
@@ -51,7 +49,8 @@ namespace Microservices.Services.AuthAPI.Service
                 return new LoginResponseDto { User = null };
             }
 
-            // TODO: Implement JWT token generation logic here
+            // Generate a JWT token for the user
+            var token = _jwtTokenGenerator.GenerateToken(user);
 
             return new LoginResponseDto
             {
@@ -59,10 +58,10 @@ namespace Microservices.Services.AuthAPI.Service
                 {
                     ID = user.Id,
                     Name = user.Name,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
+                    Email = user.Email!,
+                    PhoneNumber = user.PhoneNumber!,
                 },
-                Token = string.Empty
+                Token = token
             };
         }
 

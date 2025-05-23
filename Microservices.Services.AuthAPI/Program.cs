@@ -27,6 +27,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 // Add authentication service
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 // Setup Jwt options
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
