@@ -25,17 +25,18 @@ namespace Microservices.Services.AuthAPI.Controllers
         /// <summary>
         /// Handles user registration by processing the provided registration request.
         /// </summary>
-        /// <param name="requestDto">The registration request containing user details.</param>
-        /// <returns>Returns a 200 status code if the registration is successful or an error response if the data is invalid or registration process fails.</returns>
+        /// <param name="request">The registration request containing user details.</param>
+        /// <returns>Returns a 200 status code if the registration is successful or an error response if the data is invalid
+        /// or registration process fails.</returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDto requestDto)
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDto { IsSuccess = false, Message = "Invalid registration request." });
             }
 
-            var errorMessage = await _authService.Register(requestDto);
+            var errorMessage = await _authService.Register(request);
 
             // Check if the registration was successful
             if (errorMessage != string.Empty)
@@ -47,13 +48,29 @@ namespace Microservices.Services.AuthAPI.Controllers
         }
 
         /// <summary>
-        /// Handles user login requests.
+        /// Authenticates a user based on the provided login credentials.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="request">The login request containing the user's credentials.</param>
+        /// <returns>An <see cref="IActionResult"/> containing the result of the login operation.  Returns a 200 OK response with
+        /// a <see cref="ResponseDto"/> containing the authenticated user details if successful.  Returns a 400 Bad
+        /// Request response with an error message if the request is invalid or the credentials are incorrect.</returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            return Ok("User logged in successfully.");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDto { IsSuccess = false, Message = "The request is incorrect" });
+            }
+
+            var response = await _authService.Login(request);
+
+            // Check if the login was successful
+            if (response.User == null)
+            {
+                return BadRequest(new ResponseDto { IsSuccess = false, Message = "Username or password is incorrect" });
+            }
+
+            return Ok(new ResponseDto { Result = response });
         }
     }
 }

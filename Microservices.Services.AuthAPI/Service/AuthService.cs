@@ -28,9 +28,42 @@ namespace Microservices.Services.AuthAPI.Service
             _roleManager = roleManager;
         }
 
-        public Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
+        /// <summary>
+        /// Authenticates a user based on the provided login credentials.
+        /// </summary>
+        /// <param name="loginRequestDto">The login request containing the user's username and password.</param>
+        /// <returns>A <see cref="LoginResponseDto"/> containing the authenticated user's details and a token if the login is
+        /// successful; otherwise, a response with a null user if authentication fails.</returns>
+        public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            throw new NotImplementedException();
+            var user = _userManager.Users.FirstOrDefault(u => u.UserName == loginRequestDto.UserName);
+
+            // Check if the user exists
+            if (user == null)
+            {
+                return new LoginResponseDto { User = null };
+            }
+
+            // Check if the password is correct
+            var result = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+            if (!result)
+            {
+                return new LoginResponseDto { User = null };
+            }
+
+            // TODO: Implement JWT token generation logic here
+
+            return new LoginResponseDto
+            {
+                User = new ApplicationUserDto
+                {
+                    ID = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                },
+                Token = string.Empty
+            };
         }
 
         /// <summary>
