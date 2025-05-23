@@ -1,5 +1,8 @@
 ﻿namespace Microservices.Services.AuthAPI.Models.DTO
 {
+    /// <summary>
+    /// DTO that represents the request data for user registration.
+    /// </summary>
     public class RegisterRequestDto
     {
         public required string Name { get; set; }
