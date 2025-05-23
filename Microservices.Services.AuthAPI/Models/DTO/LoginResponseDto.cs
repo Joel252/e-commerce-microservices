@@ -2,7 +2,7 @@
 {
     public class LoginResponseDto
     {
-        public required ApplicationUserDto User { get; set; }
+        public ApplicationUserDto? User { get; set; }
         public string Token { get; set; } = string.Empty;
     }
 }
