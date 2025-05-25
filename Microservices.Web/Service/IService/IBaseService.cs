@@ -4,6 +4,6 @@ namespace Microservices.Web.Service.IService
 {
     public interface IBaseService
     {
-        public Task<ResponseDTO?> SendAsync(RequestDTO requestDTO);
+        public Task<ResponseDto?> SendAsync(RequestDto requestDTO);
     }
 }

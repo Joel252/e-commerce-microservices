@@ -15,7 +15,7 @@ namespace Microservices.Web.Service
         {
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<ResponseDTO?> SendAsync(RequestDTO requestDTO)
+        public async Task<ResponseDto?> SendAsync(RequestDto requestDTO)
         {
             try
             {
@@ -55,22 +55,22 @@ namespace Microservices.Web.Service
                 switch (apiResponse.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
-                        return new ResponseDTO() { IsSuccess = false, Message = "Not Found" };
+                        return new ResponseDto() { IsSuccess = false, Message = "Not Found" };
                     case HttpStatusCode.Forbidden:
-                        return new ResponseDTO() { IsSuccess = false, Message = "Access Denied" };
+                        return new ResponseDto() { IsSuccess = false, Message = "Access Denied" };
                     case HttpStatusCode.Unauthorized:
-                        return new ResponseDTO() { IsSuccess = false, Message = "Unauthorized" };
+                        return new ResponseDto() { IsSuccess = false, Message = "Unauthorized" };
                     case HttpStatusCode.InternalServerError:
-                        return new ResponseDTO() { IsSuccess = false, Message = "Internal Server Error" };
+                        return new ResponseDto() { IsSuccess = false, Message = "Internal Server Error" };
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                        var apiResponseDTO = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);
-                        return apiResponseDTO;
+                        var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
+                        return apiResponseDto;
                 }
             }
             catch (Exception ex)
             {
-                return new ResponseDTO()
+                return new ResponseDto()
                 {
                     IsSuccess = false,
                     Message = ex.Message.ToString(),

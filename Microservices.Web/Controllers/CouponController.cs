@@ -16,12 +16,12 @@ namespace Microservices.Web.Controllers
 
         public async Task<IActionResult> CouponIndex()
         {
-            List<CouponDTO>? list = [];
-            ResponseDTO? response = await _couponService.GetAllCuponsAsync();
+            List<CouponDto>? list = [];
+            ResponseDto? response = await _couponService.GetAllCuponsAsync();
 
             if (response?.IsSuccess == true)
             {
-                list = JsonConvert.DeserializeObject<List<CouponDTO>>(Convert.ToString(response.Result) ?? "[]");
+                list = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(response.Result) ?? "[]");
             }
             else
             {
@@ -37,11 +37,11 @@ namespace Microservices.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CouponCreate(CouponDTO coupon)
+        public async Task<IActionResult> CouponCreate(CouponDto coupon)
         {
             if (!ModelState.IsValid) return View(coupon);
-            
-            ResponseDTO? response = await _couponService.CreateCouponAsync(coupon);
+
+            ResponseDto? response = await _couponService.CreateCouponAsync(coupon);
 
             if (response?.IsSuccess == true)
             {
@@ -58,10 +58,10 @@ namespace Microservices.Web.Controllers
 
         public async Task<IActionResult> CouponDelete(int couponId)
         {
-            ResponseDTO? response = await _couponService.DeleteCouponAsync(couponId);
-            
+            ResponseDto? response = await _couponService.DeleteCouponAsync(couponId);
+
             if (response?.IsSuccess == true) TempData["success"] = "Coupon deleted successfully";
-            
+
             return RedirectToAction("CouponIndex");
         }
     }
