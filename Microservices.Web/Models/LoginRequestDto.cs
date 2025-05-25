@@ -1,4 +1,4 @@
-﻿namespace Microservices.Services.AuthAPI.Models.DTO
+﻿namespace Microservices.Web.Models
 {
     public class LoginRequestDto
     {

@@ -1,4 +1,4 @@
-﻿namespace Microservices.Services.AuthAPI.Models.DTO
+﻿namespace Microservices.Web.Models
 {
     /// <summary>
     /// DTO that represents the request data for user registration.
