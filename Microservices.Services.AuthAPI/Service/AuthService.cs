@@ -1,5 +1,4 @@
-﻿using Microservices.Services.AuthAPI.Data;
-using Microservices.Services.AuthAPI.Models;
+﻿using Microservices.Services.AuthAPI.Models;
 using Microservices.Services.AuthAPI.Models.DTO;
 using Microservices.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
@@ -12,17 +11,23 @@ namespace Microservices.Services.AuthAPI.Service
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthService"/> class.
         /// </summary>
-        /// <param name="context">The database context used for authentication-related data operations.</param>
         /// <param name="userManager">The user manager used to manage user accounts and authentication.</param>
         /// <param name="roleManager">The role manager used to manage user roles and permissions.</param>
-        public AuthService(UserManager<ApplicationUser> userManager, IJwtTokenGenerator jwtTokenGenerator)
+        /// <param name="jwtTokenGenerator">The JWT token generator used to generate JSON Web Tokens (JWT).</param>
+        public AuthService(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IJwtTokenGenerator jwtTokenGenerator
+        )
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
@@ -63,6 +68,32 @@ namespace Microservices.Services.AuthAPI.Service
                 },
                 Token = token
             };
+        }
+
+        /// <summary>
+        /// Assigns a specified role to a user identified by their email address.
+        /// </summary>
+        /// <param name="email">The email address of the user to whom the role will be assigned.</param>
+        /// <param name="role">The role to be assigned to the user.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether
+        /// the role assignment was successful.</returns>
+        public async Task<bool> AssignRole(string email, string role)
+        {
+            var user = _userManager.Users.FirstOrDefault(u => u.Email!.ToLower() == email.ToLower());
+
+            // Check if the user exists 
+            if (user == null) return false;
+
+            // Check if the role exists
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                // If the role doesn't exist, create it
+                var roleResult = await _roleManager.CreateAsync(new IdentityRole(role));
+                if (!roleResult.Succeeded) return false;
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, role);
+            return result.Succeeded;
         }
 
         /// <summary>

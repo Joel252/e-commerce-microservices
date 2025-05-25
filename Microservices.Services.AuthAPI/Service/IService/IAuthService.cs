@@ -19,5 +19,12 @@ namespace Microservices.Services.AuthAPI.Service.IService
         /// <param name="loginRequestDto">An object containing the data required to log in</param>
         /// <returns>A <see cref="LoginResponseDto"/> object containing the response details </returns>
         Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
+        /// <summary>
+        /// Assigns a specified role to a user identified by their email address.
+        /// </summary>
+        /// <param name="email">The email address of the user to whom the role will be assigned.</param>
+        /// <param name="role">The role to be assigned to the user.</param>
+        /// <returns>A boolean value indicating whether the role assignment was successful.</returns>
+        Task<bool> AssignRole(string email, string role);
     }
 }
