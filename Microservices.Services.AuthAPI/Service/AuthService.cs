@@ -61,7 +61,7 @@ namespace Microservices.Services.AuthAPI.Service
             {
                 User = new ApplicationUserDto
                 {
-                    ID = user.Id,
+                    Id = user.Id,
                     Name = user.Name,
                     Email = user.Email!,
                     PhoneNumber = user.PhoneNumber!,

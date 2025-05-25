@@ -13,12 +13,14 @@ namespace Microservices.Services.AuthAPI.Service.IService
         /// <param name="registerRequestDto">An object containing the user's registration details.</param>
         /// <returns>A string containing a message</returns>
         Task<string> Register(RegisterRequestDto registerRequestDto);
+
         /// <summary>
         /// Log in a user with the provided credentials.
         /// </summary>
         /// <param name="loginRequestDto">An object containing the data required to log in</param>
         /// <returns>A <see cref="LoginResponseDto"/> object containing the response details </returns>
         Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
+
         /// <summary>
         /// Assigns a specified role to a user identified by their email address.
         /// </summary>

@@ -8,7 +8,8 @@ namespace Microservices.Services.AuthAPI.Models
     /// </summary>
     public class ApplicationUser : IdentityUser
     {
-        [Required]
-        public required string Name { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        public required string Name { get; init; }
     }
 }

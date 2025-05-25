@@ -42,14 +42,15 @@ namespace Microservices.Services.AuthAPI.Service
                 new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName!)
             };
 
-            // Create token descriptor that defines the token's properties
+            // Create a token descriptor that defines the token's properties
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.Add(_jwtOptions.TokenLifetime),
                 Issuer = _jwtOptions.Issuer,
                 Audience = _jwtOptions.Audience,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
             };
 
             // Create the token using the token descriptor

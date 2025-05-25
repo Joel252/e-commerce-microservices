@@ -2,10 +2,9 @@
 {
     public class JwtOptions
     {
-        public string? Issuer { get; set; }
-        public string? Audience { get; set; }
-        public string? SecretKey { get; set; }
-        public TimeSpan TokenLifetime { get; set; } = TimeSpan.FromHours(1);
-
+        public string? Issuer { get; init; }
+        public string? Audience { get; init; }
+        public string? SecretKey { get; init; }
+        public TimeSpan TokenLifetime { get; init; } = TimeSpan.FromHours(1);
     }
 }
