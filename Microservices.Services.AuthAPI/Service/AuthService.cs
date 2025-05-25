@@ -75,25 +75,25 @@ namespace Microservices.Services.AuthAPI.Service
         /// </summary>
         /// <param name="email">The email address of the user to whom the role will be assigned.</param>
         /// <param name="role">The role to be assigned to the user.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether
+        /// <returns>A task that represents the asynchronous operation. The task result contains a string indicating whether
         /// the role assignment was successful.</returns>
-        public async Task<bool> AssignRole(string email, string role)
+        public async Task<string> AssignRole(string email, string role)
         {
             var user = _userManager.Users.FirstOrDefault(u => u.Email!.ToLower() == email.ToLower());
 
             // Check if the user exists 
-            if (user == null) return false;
+            if (user == null) return "User not found";
 
             // Check if the role exists
             if (!await _roleManager.RoleExistsAsync(role))
             {
                 // If the role doesn't exist, create it
                 var roleResult = await _roleManager.CreateAsync(new IdentityRole(role));
-                if (!roleResult.Succeeded) return false;
+                if (!roleResult.Succeeded) return "Role creation failed";
             }
 
             var result = await _userManager.AddToRoleAsync(user, role);
-            return result.Succeeded;
+            return result.Succeeded ? string.Empty : "User already has the role";
         }
 
         /// <summary>

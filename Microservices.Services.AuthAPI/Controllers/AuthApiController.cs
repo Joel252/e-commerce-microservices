@@ -27,7 +27,7 @@ namespace Microservices.Services.AuthAPI.Controllers
         /// </summary>
         /// <param name="request">The registration request containing user details.</param>
         /// <returns>Returns a 200 status code if the registration is successful or an error response if the data is invalid
-        /// or registration process fails.</returns>
+        /// or the registration process fails.</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
@@ -51,7 +51,7 @@ namespace Microservices.Services.AuthAPI.Controllers
         /// Authenticates a user based on the provided login credentials.
         /// </summary>
         /// <param name="request">The login request containing the user's credentials.</param>
-        /// <returns>An <see cref="IActionResult"/> containing the result of the login operation.  Returns a 200 OK response with
+        /// <returns>An <see cref="IActionResult"/> containing the result of the login operation.  Returns a 200-OK response with
         /// a <see cref="ResponseDto"/> containing the authenticated user details if successful.  Returns a 400 Bad
         /// Request response with an error message if the request is invalid or the credentials are incorrect.</returns>
         [HttpPost("login")]
@@ -78,7 +78,7 @@ namespace Microservices.Services.AuthAPI.Controllers
         /// </summary>
         /// <param name="request">The request data containing user email and the role to be assigned.</param>
         /// <returns>An <see cref="IActionResult"/> containing the result of the role assignment operation.
-        /// Returns a 200 OK response if successful.  Returns a 400 Bad Request response with an error message if the request
+        /// Returns a 200-OK response if successful.  Returns a 400 Bad Request response with an error message if the request
         /// is invalid, the role is incorrect or the request doesn't contain a role.</returns>
         [HttpPost("assignRole")]
         public async Task<IActionResult> AssignRole([FromBody] RegisterRequestDto request)
@@ -95,7 +95,14 @@ namespace Microservices.Services.AuthAPI.Controllers
             }
 
             var response = await _authService.AssignRole(request.Email, request.Role);
-            return Ok(new ResponseDto { Result = response });
+
+            // Check if the role assignment was successful
+            if (response != string.Empty)
+            {
+                return BadRequest(new ResponseDto { IsSuccess = false, Message = response });
+            }
+
+            return Ok(new ResponseDto { Result = "Role assigning successful" });
         }
     }
 }

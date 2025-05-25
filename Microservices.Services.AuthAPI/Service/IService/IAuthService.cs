@@ -14,7 +14,7 @@ namespace Microservices.Services.AuthAPI.Service.IService
         /// <returns>A string containing a message</returns>
         Task<string> Register(RegisterRequestDto registerRequestDto);
         /// <summary>
-        /// Login a user with the provided credentials.
+        /// Log in a user with the provided credentials.
         /// </summary>
         /// <param name="loginRequestDto">An object containing the data required to log in</param>
         /// <returns>A <see cref="LoginResponseDto"/> object containing the response details </returns>
@@ -24,7 +24,7 @@ namespace Microservices.Services.AuthAPI.Service.IService
         /// </summary>
         /// <param name="email">The email address of the user to whom the role will be assigned.</param>
         /// <param name="role">The role to be assigned to the user.</param>
-        /// <returns>A boolean value indicating whether the role assignment was successful.</returns>
-        Task<bool> AssignRole(string email, string role);
+        /// <returns>A string value indicating whether the role assignment was successful.</returns>
+        Task<string> AssignRole(string email, string role);
     }
 }
