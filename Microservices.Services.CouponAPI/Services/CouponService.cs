@@ -76,6 +76,7 @@ namespace Microservices.Services.CouponAPI.Services
                     response.Message = "Coupon not found.";
                     return response;
                 }
+
                 _context.Coupons.Remove(coupon);
                 await _context.SaveChangesAsync();
 
@@ -126,7 +127,8 @@ namespace Microservices.Services.CouponAPI.Services
         {
             var response = new ResponseDto();
 
-            try             {
+            try
+            {
                 var coupon = await _context.Coupons.FirstOrDefaultAsync(c => c.CouponCode.ToLower() == code.ToLower());
                 if (coupon == null)
                 {

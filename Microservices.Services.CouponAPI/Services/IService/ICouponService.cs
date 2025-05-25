@@ -13,6 +13,7 @@ namespace Microservices.Services.CouponAPI.Services.IService
         /// <returns>A <see cref="ResponseDto"/> containing the list of all coupons.  The response may include additional
         /// metadata or error details if applicable.</returns>
         Task<ResponseDto> GetAllCouponsAsync();
+
         /// <summary>
         /// Retrieves the details of a coupon by its unique identifier.
         /// </summary>
@@ -21,6 +22,7 @@ namespace Microservices.Services.CouponAPI.Services.IService
         /// object with the details of the coupon if found, or an appropriate error message if the coupon does not
         /// exist.</returns>
         Task<ResponseDto> GetCouponByIdAsync(int id);
+
         /// <summary>
         /// Retrieves a coupon by its unique code.
         /// </summary>
@@ -28,6 +30,7 @@ namespace Microservices.Services.CouponAPI.Services.IService
         /// <returns>A <see cref="ResponseDto"/> containing the details of the coupon if found;  otherwise, an appropriate
         /// response indicating the coupon was not found.</returns>
         Task<ResponseDto> GetCouponByCodeAsync(string code);
+
         /// <summary>
         /// Creates a new coupon asynchronously.
         /// </summary>
@@ -35,6 +38,7 @@ namespace Microservices.Services.CouponAPI.Services.IService
         /// <returns>A <see cref="ResponseDto"/> containing the result of the operation, including success status and any
         /// relevant messages.</returns>
         Task<ResponseDto> CreateCouponAsync(CouponDto couponDto);
+
         /// <summary>
         /// Updates an existing coupon with the specified details.
         /// </summary>
@@ -42,6 +46,7 @@ namespace Microservices.Services.CouponAPI.Services.IService
         /// <returns>A <see cref="ResponseDto"/> containing the result of the update operation, including success status and any
         /// relevant messages.</returns>
         Task<ResponseDto> UpdateCouponAsync(CouponDto couponDto);
+
         /// <summary>
         /// Deletes a coupon with the specified identifier.
         /// </summary>

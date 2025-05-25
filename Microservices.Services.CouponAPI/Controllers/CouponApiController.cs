@@ -1,12 +1,11 @@
-﻿using Microservices.Services.CouponAPI.Models;
-using Microservices.Services.CouponAPI.Models.DTO;
+﻿using Microservices.Services.CouponAPI.Models.DTO;
 using Microservices.Services.CouponAPI.Services.IService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservices.Services.CouponAPI.Controllers
 {
     /// <summary>
-    /// Provides API endpoints for managing coupons operations.
+    /// Provides API endpoints for managing coupon operations.
     /// </summary>
     [Route("api/coupon")]
     [ApiController]
@@ -79,7 +78,7 @@ namespace Microservices.Services.CouponAPI.Controllers
         /// <summary>
         /// Updates an existing coupon.
         /// </summary>
-        /// <param name="dto">The DTO containing updated coupon data.</param>
+        /// <param name="couponDto">The DTO containing updated coupon data.</param>
         /// <returns>The updated coupon, or an error response if the update failed.</returns>
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] CouponDto couponDto)
