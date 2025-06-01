@@ -1,6 +1,7 @@
 using Microservices.Web.Service;
 using Microservices.Web.Service.IService;
 using Microservices.Web.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,18 @@ builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IUserAuthenticator, UserAuthenticator>();
+
+// Add authentication middleware
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.SlidingExpiration = true;
+        options.Cookie.HttpOnly = true;
+    });
 
 var app = builder.Build();
 
@@ -38,6 +51,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Enable authentication middleware
 app.UseAuthorization();
 
 app.MapControllerRoute(

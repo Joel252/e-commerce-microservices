@@ -1,6 +1,7 @@
 ﻿using Microservices.Web.Models;
 using Microservices.Web.Service.IService;
 using Microservices.Web.Utility;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -9,10 +10,15 @@ namespace Microservices.Web.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly ITokenProvider _tokenProvider;
+        private readonly IUserAuthenticator _userAuthenticator;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider,
+            IUserAuthenticator userAuthenticator)
         {
             _authService = authService;
+            _tokenProvider = tokenProvider;
+            _userAuthenticator = userAuthenticator;
         }
 
         // GET: AuthController/Login
@@ -20,12 +26,6 @@ namespace Microservices.Web.Controllers
         {
             LoginRequestDto loginRequestDto = new();
             return View(loginRequestDto);
-        }
-
-        // GET: AuthController/Logout
-        public IActionResult LogOut()
-        {
-            return View();
         }
 
         // POST: AuthController/Login
@@ -45,14 +45,30 @@ namespace Microservices.Web.Controllers
 
             // Check if the response contains a valid user object
             var loginResponse = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
-            if (loginResponse == null || loginResponse.User == null)
+            if (loginResponse?.User == null)
             {
                 TempData["error"] = "Login failed. Please try again.";
                 return View(request);
             }
 
             // Set the authentication cookie
+            _tokenProvider.SetToken(loginResponse.Token);
+
+            // Authenticate the user using the token in .NET Core Identity
+            await _userAuthenticator.AuthenticateUserAsync(loginResponse.Token);
+
             TempData["success"] = "Login successful!";
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: AuthController/Logout
+        public async Task<IActionResult> LogOut()
+        {
+            // Clear the authentication cookie
+            await HttpContext.SignOutAsync();
+            _tokenProvider.ClearToken();
+            
+            TempData["success"] = "Logout successful!";
             return RedirectToAction("Index", "Home");
         }
 
