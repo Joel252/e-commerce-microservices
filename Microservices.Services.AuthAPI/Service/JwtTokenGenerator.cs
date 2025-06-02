@@ -29,7 +29,7 @@ namespace Microservices.Services.AuthAPI.Service
         /// </summary>
         /// <param name="applicationUser">The user for whom the token is being generated.</param>
         /// <returns>The generated JWT string</returns>
-        public string GenerateToken(ApplicationUser applicationUser)
+        public string GenerateToken(ApplicationUser applicationUser, IEnumerable<string> roles)
         {
             // Encode the secret key using ASCII encoding
             var key = Encoding.ASCII.GetBytes(_jwtOptions.SecretKey!);
@@ -42,6 +42,8 @@ namespace Microservices.Services.AuthAPI.Service
                 new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName!)
             };
 
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            
             // Create a token descriptor that defines the token's properties
             var tokenDescriptor = new SecurityTokenDescriptor
             {

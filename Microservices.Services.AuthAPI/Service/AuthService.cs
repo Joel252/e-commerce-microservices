@@ -55,7 +55,8 @@ namespace Microservices.Services.AuthAPI.Service
             }
 
             // Generate a JWT token for the user
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
             return new LoginResponseDto
             {

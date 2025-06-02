@@ -35,6 +35,9 @@ public class UserAuthenticator(IHttpContextAccessor contextAccessor) : IUserAuth
         // Add a claim that using .NET to User.Identity.Name
         identity.AddClaim(new Claim(ClaimTypes.Name,
             jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value!));
+        // Add a claim that using .NET to User.Identity.Role
+        identity.AddClaim(new Claim(ClaimTypes.Role,
+            jwt.Claims.FirstOrDefault(c => c.Type == "role")?.Value!));
 
         // Create a ClaimsPrincipal associated with the ClaimsIdentity
         var claimsPrincipal = new ClaimsPrincipal(identity);
