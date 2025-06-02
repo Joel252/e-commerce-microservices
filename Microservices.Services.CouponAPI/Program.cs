@@ -1,8 +1,11 @@
+using System.Text;
 using Microservices.Services.CouponAPI;
 using Microservices.Services.CouponAPI.Data;
 using Microservices.Services.CouponAPI.Services;
 using Microservices.Services.CouponAPI.Services.IService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,33 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add service for coupon operations
 builder.Services.AddScoped<ICouponService, CouponService>();
 
+// Add authentication service
+var secret = builder.Configuration["ApiSettings:SecretKey"];
+var issuer = builder.Configuration["ApiSettings:Issuer"];
+var audience = builder.Configuration["ApiSettings:Audience"];
+
+var key = Encoding.ASCII.GetBytes(secret); // Convert the secret to a byte array
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    var tokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidIssuer = issuer,
+        ValidateAudience = true,
+        ValidAudience = audience
+    };
+});
+
+// Add authorization service
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,6 +68,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication(); // Enable authentication middleware
 app.UseAuthorization();
 
 app.MapControllers();

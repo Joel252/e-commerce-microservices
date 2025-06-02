@@ -1,5 +1,6 @@
 ﻿using Microservices.Services.CouponAPI.Models.DTO;
 using Microservices.Services.CouponAPI.Services.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservices.Services.CouponAPI.Controllers
@@ -9,6 +10,7 @@ namespace Microservices.Services.CouponAPI.Controllers
     /// </summary>
     [Route("api/coupon")]
     [ApiController]
+    [Authorize]
     public class CouponApiController : ControllerBase
     {
         private readonly ICouponService _couponService;
