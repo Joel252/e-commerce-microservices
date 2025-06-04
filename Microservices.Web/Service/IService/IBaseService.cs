@@ -4,6 +4,6 @@ namespace Microservices.Web.Service.IService
 {
     public interface IBaseService
     {
-        public Task<ResponseDto?> SendAsync(RequestDto requestDTO);
+        public Task<ResponseDto?> SendAsync(RequestDto requestDto, bool isAuthRequired = true);
     }
 }

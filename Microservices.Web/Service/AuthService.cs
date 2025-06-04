@@ -34,7 +34,7 @@ public class AuthService : IAuthService
             RequestType = SD.RequestType.POST,
             Url = SD.AuthAPIBase + $"{RESOURCE}/register",
             Data = registerRequestDto
-        });
+        }, isAuthRequired: false);
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public class AuthService : IAuthService
             RequestType = SD.RequestType.POST,
             Url = SD.AuthAPIBase + $"{RESOURCE}/login",
             Data = loginRequestDto
-        });
+        }, isAuthRequired: false);
     }
 
     /// <summary>

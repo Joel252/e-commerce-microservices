@@ -10,12 +10,15 @@ namespace Microservices.Web.Service
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ITokenProvider _tokenProvider;
 
-        public BaseService(IHttpClientFactory httpClientFactory)
+        public BaseService(IHttpClientFactory httpClientFactory, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
+            _tokenProvider = tokenProvider;
         }
-        public async Task<ResponseDto?> SendAsync(RequestDto requestDTO)
+
+        public async Task<ResponseDto?> SendAsync(RequestDto requestDto, bool isAuthRequired = true)
         {
             try
             {
@@ -23,18 +26,23 @@ namespace Microservices.Web.Service
 
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
-                // token
-
-                message.RequestUri = new Uri(requestDTO.Url);
-
-                if (requestDTO.Data != null)
+                if (isAuthRequired)
                 {
-                    message.Content = new StringContent(JsonConvert.SerializeObject(requestDTO.Data), Encoding.UTF8, "application/json");
+                    var token = _tokenProvider.GetToken();
+                    message.Headers.Add("Authorization", $"Bearer {token}");
+                }
+
+                message.RequestUri = new Uri(requestDto.Url);
+
+                if (requestDto.Data != null)
+                {
+                    message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8,
+                        "application/json");
                 }
 
                 HttpResponseMessage? apiResponse = null;
 
-                switch (requestDTO.RequestType)
+                switch (requestDto.RequestType)
                 {
                     case RequestType.POST:
                         message.Method = HttpMethod.Post;
