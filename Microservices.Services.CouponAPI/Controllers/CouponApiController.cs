@@ -66,6 +66,7 @@ namespace Microservices.Services.CouponAPI.Controllers
         /// <param name="couponDto">The DTO containing coupon information.</param>
         /// <returns>The created coupon, or an error response if the data is invalid.</returns>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] CouponDto couponDto)
         {
             if (!ModelState.IsValid)
@@ -83,6 +84,7 @@ namespace Microservices.Services.CouponAPI.Controllers
         /// <param name="couponDto">The DTO containing updated coupon data.</param>
         /// <returns>The updated coupon, or an error response if the update failed.</returns>
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put([FromBody] CouponDto couponDto)
         {
             if (!ModelState.IsValid)
@@ -101,6 +103,7 @@ namespace Microservices.Services.CouponAPI.Controllers
         /// <returns>A success message or a 404 if the coupon was not found.</returns>
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _couponService.DeleteCouponAsync(id);
