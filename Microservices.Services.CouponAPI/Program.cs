@@ -1,4 +1,3 @@
-using System.Text;
 using Microservices.Services.CouponAPI;
 using Microservices.Services.CouponAPI.Data;
 using Microservices.Services.CouponAPI.Extensions;
@@ -6,7 +5,6 @@ using Microservices.Services.CouponAPI.Services;
 using Microservices.Services.CouponAPI.Services.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
