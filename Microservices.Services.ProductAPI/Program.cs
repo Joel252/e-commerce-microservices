@@ -18,6 +18,11 @@ builder.Services.AddDbContext<ProductDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
 });
 
+// Configure AutoMapper for object mapping
+var mapper = MappingConfig.RegisterMap().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Add service for product operations
 builder.Services.AddScoped<IProductService, ProductService>();
 
