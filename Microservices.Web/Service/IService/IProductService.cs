@@ -2,6 +2,9 @@
 
 namespace Microservices.Web.Service.IService
 {
+    /// <summary>
+    /// Interface for product service.
+    /// </summary>
     public interface IProductService
     {
         /// <summary>

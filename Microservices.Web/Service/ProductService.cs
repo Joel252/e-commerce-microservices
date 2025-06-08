@@ -22,8 +22,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.POST,
-                Url = SD.ProductAPIBase + RESOURCE,
+                RequestType = RequestType.Post,
+                Url = SD.ProductApiBase + RESOURCE,
                 Data = productDto
             });
         }
@@ -37,8 +37,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.DELETE,
-                Url = SD.ProductAPIBase + $"{RESOURCE}/{id}"
+                RequestType = RequestType.Delete,
+                Url = SD.ProductApiBase + $"{RESOURCE}/{id}"
             });
         }
 
@@ -50,8 +50,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.GET,
-                Url = SD.ProductAPIBase + RESOURCE,
+                RequestType = RequestType.Get,
+                Url = SD.ProductApiBase + RESOURCE,
             });
         }
 
@@ -64,8 +64,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.GET,
-                Url = SD.ProductAPIBase + $"{RESOURCE}/{id}"
+                RequestType = RequestType.Get,
+                Url = SD.ProductApiBase + $"{RESOURCE}/{id}"
             });
         }
 
@@ -78,8 +78,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.PUT,
-                Url = SD.ProductAPIBase + RESOURCE,
+                RequestType = RequestType.Put,
+                Url = SD.ProductApiBase + RESOURCE,
                 Data = productDto
             });
         }

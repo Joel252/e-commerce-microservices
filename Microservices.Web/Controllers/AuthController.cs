@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace Microservices.Web.Controllers
 {
+    /// <summary>
+    /// Controller responsible for handling authentication-related operations, including login, logout, and registration.
+    /// </summary>
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -21,14 +24,14 @@ namespace Microservices.Web.Controllers
             _userAuthenticator = userAuthenticator;
         }
 
-        // GET: AuthController/Login
+        // Action to load the login view
         public IActionResult LogIn()
         {
             LoginRequestDto loginRequestDto = new();
             return View(loginRequestDto);
         }
 
-        // POST: AuthController/Login
+        // POST: Action to process the login request
         [HttpPost]
         public async Task<IActionResult> LogIn(LoginRequestDto request)
         {
@@ -37,14 +40,15 @@ namespace Microservices.Web.Controllers
 
             // Check if the login request is successful
             var response = await _authService.Login(request);
-            if (!response.IsSuccess)
+            if (!response?.IsSuccess == true)
             {
-                ModelState.AddModelError("CustomError", response.Message);
+                TempData["error"] = response?.Message;
                 return View(request);
             }
 
             // Check if the response contains a valid user object
-            var loginResponse = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
+            var loginResponse =
+                JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response?.Result) ?? "null");
             if (loginResponse?.User == null)
             {
                 TempData["error"] = "Login failed. Please try again.";
@@ -61,25 +65,25 @@ namespace Microservices.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: AuthController/Logout
+        // Action to clear the authentication cookie
         public async Task<IActionResult> LogOut()
         {
             // Clear the authentication cookie
             await HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
-            
+
             TempData["success"] = "Logout successful!";
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: AuthController/Register
+        // Action to load the registration view
         public IActionResult Register()
         {
             ViewBag.RoleList = RoleListHelper.GetRoleList();
             return View();
         }
 
-        // POST: AuthController/Register
+        // POST: Action to process the registration request
         [HttpPost]
         public async Task<IActionResult> Register(RegisterRequestDto request)
         {
@@ -94,9 +98,9 @@ namespace Microservices.Web.Controllers
 
             // Check if the registration request is successful
             var response = await _authService.Register(request);
-            if (!response.IsSuccess)
+            if (!response?.IsSuccess == true)
             {
-                TempData["error"] = response.Message;
+                TempData["error"] = response?.Message;
                 ViewBag.RoleList = roleList;
                 return View(request);
             }
@@ -104,14 +108,14 @@ namespace Microservices.Web.Controllers
             // If the role is not specified, default to Customer
             if (string.IsNullOrWhiteSpace(request.Role))
             {
-                request.Role = SD.RoleType.Customer.ToString();
+                request.Role = nameof(SD.RoleType.Customer);
             }
 
             // Check if the assigning role is valid
             var roleResponse = await _authService.AssignRole(request);
-            if (!roleResponse.IsSuccess)
+            if (!roleResponse?.IsSuccess == true)
             {
-                TempData["error"] = roleResponse.Message;
+                TempData["error"] = roleResponse?.Message;
                 ViewBag.RoleList = roleList;
                 return View(request);
             }

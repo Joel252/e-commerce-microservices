@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections;
-
-namespace Microservices.Web.Utility
+﻿namespace Microservices.Web.Utility
 {
     /// <summary>
     /// Auxiliary class for storing constants.
@@ -9,9 +6,9 @@ namespace Microservices.Web.Utility
     public static class SD
     {
         // Auxiliary constants for API base URLs
-        public static string AuthAPIBase { get; set; }
-        public static string CouponAPIBase { get; set; }
-        public static string ProductAPIBase { get; set; }
+        public static string AuthApiBase { get; set; } = string.Empty;
+        public static string CouponApiBase { get; set; } = string.Empty;
+        public static string ProductApiBase { get; set; } = string.Empty;
 
         // Auxiliary constants for cookies
         public const string TokenCookie = "JwtToken";
@@ -26,10 +23,10 @@ namespace Microservices.Web.Utility
         // Auxiliary enum for RequestType
         public enum RequestType
         {
-            GET,
-            POST,
-            PUT,
-            DELETE
+            Get,
+            Post,
+            Put,
+            Delete
         }
     }
 }

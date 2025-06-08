@@ -31,8 +31,8 @@ public class AuthService : IAuthService
     {
         return await _baseService.SendAsync(new RequestDto
         {
-            RequestType = SD.RequestType.POST,
-            Url = SD.AuthAPIBase + $"{RESOURCE}/register",
+            RequestType = SD.RequestType.Post,
+            Url = SD.AuthApiBase + $"{RESOURCE}/register",
             Data = registerRequestDto
         }, isAuthRequired: false);
     }
@@ -46,8 +46,8 @@ public class AuthService : IAuthService
     {
         return await _baseService.SendAsync(new RequestDto
         {
-            RequestType = SD.RequestType.POST,
-            Url = SD.AuthAPIBase + $"{RESOURCE}/login",
+            RequestType = SD.RequestType.Post,
+            Url = SD.AuthApiBase + $"{RESOURCE}/login",
             Data = loginRequestDto
         }, isAuthRequired: false);
     }
@@ -61,8 +61,8 @@ public class AuthService : IAuthService
     {
         return await _baseService.SendAsync(new RequestDto
         {
-            RequestType = SD.RequestType.POST,
-            Url = SD.AuthAPIBase + $"{RESOURCE}/assignRole",
+            RequestType = SD.RequestType.Post,
+            Url = SD.AuthApiBase + $"{RESOURCE}/assignRole",
             Data = registerRequestDto
         });
     }

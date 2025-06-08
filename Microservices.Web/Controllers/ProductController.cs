@@ -10,31 +10,30 @@ namespace Microservices.Web.Controllers
     /// </summary>
     public class ProductController(IProductService productService) : Controller
     {
-        // Index action to list all products
+        // Index action to load the product list in the view
         public async Task<IActionResult> ProductIndex()
         {
             var list = new List<ProductDto>();
             var response = await productService.GetAllProductsAsync();
 
-            if (response?.IsSuccess == true)
-            {
-                list = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result) ?? "[]");
-            }
-            else
+            if (!response?.IsSuccess == true)
             {
                 TempData["error"] = response?.Message;
+                return View(list);
             }
+
+            list = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response?.Result) ?? "[]");
 
             return View(list);
         }
 
-        // Create action to create a new product
+        // Action to load the creation product view
         public Task<IActionResult> ProductCreate()
         {
             return Task.FromResult<IActionResult>(View());
         }
 
-        // POST action to create a new product
+        // POST: Action to process the creation request for a product
         [HttpPost]
         public async Task<IActionResult> ProductCreate(ProductDto productDto)
         {
@@ -42,32 +41,28 @@ namespace Microservices.Web.Controllers
 
             var response = await productService.CreateProductAsync(productDto);
 
-            if (response?.IsSuccess == true)
-            {
-                TempData["success"] = "Product created successfully";
-                return RedirectToAction("ProductIndex");
-            }
-            else
+            if (!response?.IsSuccess == true)
             {
                 TempData["error"] = response?.Message;
+                return View(productDto);
             }
 
-            return View(productDto);
+            TempData["success"] = "Product created successfully";
+            return RedirectToAction("ProductIndex");
         }
 
-        // Delete action to delete a product
+        // Action to delete a product by its ID
         public async Task<IActionResult> ProductDelete(int productId)
         {
             var response = await productService.DeleteProductAsync(productId);
 
-            if (response?.IsSuccess == true)
-            {
-                TempData["success"] = "Product deleted successfully";
-            }
-            else
+            if (!response?.IsSuccess == true)
             {
                 TempData["error"] = response?.Message;
+                return RedirectToAction("ProductIndex");
             }
+
+            TempData["success"] = "Product deleted successfully";
 
             return RedirectToAction("ProductIndex");
         }

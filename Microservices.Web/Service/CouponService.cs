@@ -5,6 +5,10 @@ using static Microservices.Web.Utility.SD;
 
 namespace Microservices.Web.Service
 {
+    /// <summary>
+    /// Provides methods to manage coupon-related operations by interacting with the Coupon API.
+    /// Implements the <see cref="ICouponService"/> interface.
+    /// </summary>
     public class CouponService : ICouponService
     {
         private readonly IBaseService _baseService;
@@ -19,8 +23,8 @@ namespace Microservices.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.POST,
-                Url = SD.CouponAPIBase + RESOURCE,  
+                RequestType = RequestType.Post,
+                Url = SD.CouponApiBase + RESOURCE,  
                 Data = couponDto
             });
         }
@@ -29,8 +33,8 @@ namespace Microservices.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.DELETE,
-                Url = SD.CouponAPIBase + $"{RESOURCE}/{id}"
+                RequestType = RequestType.Delete,
+                Url = SD.CouponApiBase + $"{RESOURCE}/{id}"
             });
         }
 
@@ -38,8 +42,8 @@ namespace Microservices.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.GET,
-                Url = SD.CouponAPIBase + RESOURCE
+                RequestType = RequestType.Get,
+                Url = SD.CouponApiBase + RESOURCE
             });
         }
 
@@ -47,8 +51,8 @@ namespace Microservices.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.GET,
-                Url = SD.CouponAPIBase + $"{RESOURCE}/GetByCode/{couponCode}"
+                RequestType = RequestType.Get,
+                Url = SD.CouponApiBase + $"{RESOURCE}/GetByCode/{couponCode}"
             });
         }
 
@@ -56,8 +60,8 @@ namespace Microservices.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.GET,
-                Url = SD.CouponAPIBase + $"{RESOURCE}/{id}"
+                RequestType = RequestType.Get,
+                Url = SD.CouponApiBase + $"{RESOURCE}/{id}"
             });
         }
 
@@ -65,8 +69,8 @@ namespace Microservices.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                RequestType = RequestType.PUT,
-                Url = SD.CouponAPIBase + RESOURCE,
+                RequestType = RequestType.Put,
+                Url = SD.CouponApiBase + RESOURCE,
                 Data = couponDto
             });
         }

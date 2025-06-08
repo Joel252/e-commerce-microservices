@@ -7,6 +7,13 @@ using static Microservices.Web.Utility.SD;
 
 namespace Microservices.Web.Service
 {
+    /// <summary>
+    /// Provides a base implementation for sending HTTP requests while supporting authentication requirements.
+    /// </summary>
+    /// <remarks>
+    /// This service interacts with the underlying HTTP client factory to send requests
+    /// and optionally handles token-based authentication based on configured defaults.
+    /// </remarks>
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -18,13 +25,21 @@ namespace Microservices.Web.Service
             _tokenProvider = tokenProvider;
         }
 
+        /// <summary>
+        /// Sends an asynchronous request and retrieves a response based on the specified parameters.
+        /// </summary>
+        /// <param name="requestDto">The request payload encapsulated as a <c>RequestDto</c> object.</param>
+        /// <param name="isAuthRequired">A boolean flag indicating whether authentication is required for the request. Default value is <c>true</c>.</param>
+        /// <returns>A task that represents the asynchronous operation, returning a <c>ResponseDto</c> object or <c>null</c> if the operation fails.</returns>
         public async Task<ResponseDto?> SendAsync(RequestDto requestDto, bool isAuthRequired = true)
         {
             try
             {
-                HttpClient cliient = _httpClientFactory.CreateClient("MicroservicesAPI");
+                // Create a new HTTP client using the configured client name
+                var client = _httpClientFactory.CreateClient("MicroservicesAPI");
 
-                HttpRequestMessage message = new HttpRequestMessage();
+                // Set the request headers
+                var message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 if (isAuthRequired)
                 {
@@ -32,25 +47,23 @@ namespace Microservices.Web.Service
                     message.Headers.Add("Authorization", $"Bearer {token}");
                 }
 
+                // Set the request URI
                 message.RequestUri = new Uri(requestDto.Url);
 
-                if (requestDto.Data != null)
-                {
-                    message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8,
-                        "application/json");
-                }
+                // Set the request content
+                message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8,
+                    "application/json");
 
-                HttpResponseMessage? apiResponse = null;
-
+                // Set the request method based on the request type 
                 switch (requestDto.RequestType)
                 {
-                    case RequestType.POST:
+                    case RequestType.Post:
                         message.Method = HttpMethod.Post;
                         break;
-                    case RequestType.PUT:
+                    case RequestType.Put:
                         message.Method = HttpMethod.Put;
                         break;
-                    case RequestType.DELETE:
+                    case RequestType.Delete:
                         message.Method = HttpMethod.Delete;
                         break;
                     default:
@@ -58,8 +71,10 @@ namespace Microservices.Web.Service
                         break;
                 }
 
-                apiResponse = await cliient.SendAsync(message);
+                // Send the request
+                var apiResponse = await client.SendAsync(message);
 
+                // Check if the request was successful and return the response
                 switch (apiResponse.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
@@ -81,7 +96,7 @@ namespace Microservices.Web.Service
                 return new ResponseDto()
                 {
                     IsSuccess = false,
-                    Message = ex.Message.ToString(),
+                    Message = ex.Message,
                 };
             }
         }

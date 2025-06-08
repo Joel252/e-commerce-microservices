@@ -16,9 +16,9 @@ builder.Services.AddHttpClient<IProductService, ProductService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 
 // Set the API base URL
-SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
-SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
-SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
+SD.CouponApiBase = builder.Configuration["ServiceUrls:CouponAPI"];
+SD.ProductApiBase = builder.Configuration["ServiceUrls:ProductAPI"];
+SD.AuthApiBase = builder.Configuration["ServiceUrls:AuthAPI"];
 
 // Add service for request operations
 builder.Services.AddScoped<IBaseService, BaseService>();
