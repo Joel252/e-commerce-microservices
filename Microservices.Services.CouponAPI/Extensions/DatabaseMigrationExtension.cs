@@ -1,7 +1,7 @@
 using Microservices.Services.CouponAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Microservices.Services.CouponAPI;
+namespace Microservices.Services.CouponAPI.Extensions;
 
 /// <summary>
 /// Extension method for applying database migrations.
