@@ -37,6 +37,10 @@ namespace Microservices.Services.ProductAPI.Data
                     Category = "Muebles"
                 }
             );
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasPrecision(18, 2);
         }
     }
 }
