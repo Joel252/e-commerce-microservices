@@ -2,9 +2,12 @@
 
 namespace Microservices.Web.Utility
 {
+    /// <summary>
+    /// Auxiliary class for populating role lists.
+    /// </summary>
     public static class RoleListHelper
     {
-        // Auxiliary method to populate the role list for dropdowns
+        // Method to return a list of roles mapped to SelectListItem objects
         public static IEnumerable<SelectListItem> GetRoleList()
         {
             return Enum.GetNames(typeof(SD.RoleType))
