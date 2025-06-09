@@ -37,7 +37,7 @@
                     <td>@((product.Description))</td>
                     <td>@((product.Price).ToString("c"))</td>
                     <td>@((product.Stock).ToString())</td>
-                    <td><img src="@((product.ImageUrl))" alt="" width="200" height="200"></td>
+                    <td><img src="@((product.ImageUrl))" alt="" width="200"></td>
                     <td>@((product.Category))</td>
                     <td>
                         <a asp-action="ProductDelete" asp-route-productId="@product.ProductId" class="btn btn-danger">
